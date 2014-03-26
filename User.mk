@@ -1,0 +1,2 @@
+DerivedDirectory=derived
+Prerequisites=counter tools

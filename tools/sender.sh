@@ -1,0 +1,110 @@
+#!/bin/bash
+if [ `uname -m` = x86_64 ]; then
+    debug=1
+else
+    debug=1
+fi
+if [ $debug -eq 1 ]; then
+    pingTimeout=1
+    reconnectTime=1
+    connectTimeout=3
+    transferTimeout=2
+    retries=3
+    nightStart=15
+    nightEnd=22
+else
+    pingTimeout=20
+    reconnectTime=600
+    connectTimeout=900
+    transferTimeout=200
+    retries=10
+    nightStart=22
+    nightEnd=2
+fi
+
+function night_ {
+    hour=`date +%H`
+    if [ $hour -ge $nightStart -o $hour -le $nightEnd ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+function night {
+    return 0 # 0: always night
+}
+function reconnect {
+    retrycounter=0
+    #while ! wget --spider www.google.de > /dev/null; do
+    while ! nslookup www.google.de | grep authoritative > /dev/null; do
+        if [ $retrycounter -ge $retries ]; then
+            echo returning after reconnect failed after $retrycounter retries at `date`. >&2
+            return 1
+        fi
+        let retrycounter++
+        echo "wget failed at `date`, retrycounter=$retrycounter, trying until $retries retries until reboot." >&2
+        sleep $connectTimeout
+    done
+    echo successful reconnect at `date`. >&2
+    return 0
+}
+function send {
+    echo sending at `date`. >&2
+    if [ $debug -eq 1 ]; then
+        echo -n -e "$buffer" >&2
+    fi
+    response=`echo -n -e "data=$buffer" | curl -s -S --connect-timeout $transferTimeout --data-binary @- $1`
+    ret=$?
+    echo $response
+    return $ret
+}
+connected=1
+linecounter=0
+overloadCounter=0
+buffer=""
+echo "starting sender" >&2
+while read line; do
+    let linecounter++
+    buffer="$buffer$line\n"
+    if [ $debug -eq 1 ]; then
+        echo reading $line at `date`. >&2
+    fi
+    if read -t 0 -N 0; then
+        continue
+    fi
+    if [ $connected -eq 1 ]; then
+        if [ $linecounter -ge $1 ]; then
+            if serverResponse=`send $2`; then
+                if [ "$serverResponse" = "" ]; then
+                    buffer=""
+                    linecounter=0
+                    overloadCounter=0
+                    rm -f data.txt
+                else
+                    let overloadCounter++
+                    echo "$overloadCounter overloads at `date`?! respone=$serverResponse" >&2
+                    echo "$buffer" >&2
+                    buffer=""
+                    linecounter=0
+                    sleep $overloadCounter
+                fi
+            else
+                if ! reconnect; then
+                    echo going unconnected at `date`. >&2
+                    connected=0
+                fi
+            fi
+        fi
+    else
+        if ! read -t 0 -N 0; then
+            echo rebooting when unconnected at `date`, was exiting. >&2
+            echo -n -e "$buffer"
+            ./reboot.tcl >&2
+            echo "reboot triggered, continuing" >&2
+            connected=1
+        fi
+    fi
+done
+echo -n -e "$buffer"
+echo sender ended due to short read at `date`. >&2
+date +"%F %T" > $DATA.date
