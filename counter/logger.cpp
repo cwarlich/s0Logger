@@ -113,6 +113,7 @@ int  main(int argc, const char *argv[]) {
     Time time;
     readerThread.run((double) interval, (double ((long long) (time + (double) interval) / interval * interval)));
     updateThread.join();
+    fprintf(stderr, "readerThread has terminated!\n");
     readerThread.terminate();
     readerThread.join();
     return 0;

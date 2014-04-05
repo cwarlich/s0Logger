@@ -38,11 +38,14 @@ class GpioBase: protected GpioCheck {
         // To simplify things, we use a common mutex for all pins.
         Lock lock(StaticMutex<GpioBase>::mutex());
         if(!instancesPerPin()[pin]) {
-            fprintf(stderr, "echo %s >/sys/class/gpio/export\n", spin.c_str());
-            int fd = open("/sys/class/gpio/export", O_WRONLY);
-            ASSERT(fd > 0, "/sys/class/gpio/export"); 
-            ASSERT(write(fd, spin.c_str(), spin.length()) > 0, spin.c_str());
-            close(fd);
+            if(access(("/sys/class/gpio/gpio" + spin).c_str(), R_OK | W_OK)) {
+                fprintf(stderr, "echo %s >/sys/class/gpio/export\n", spin.c_str());
+                int fd = open("/sys/class/gpio/export", O_WRONLY);
+                ASSERT(fd > 0, "/sys/class/gpio/export"); 
+                ASSERT(write(fd, spin.c_str(), spin.length()) > 0, spin.c_str());
+                close(fd);
+            }
+            else fprintf(stderr, "/sys/class/gpio/gpio%s already existing\n", spin.c_str());
         }
         instancesPerPin()[pin]++;
     }

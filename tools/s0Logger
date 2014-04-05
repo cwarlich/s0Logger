@@ -1,0 +1,19 @@
+#!/bin/bash
+# mask:     port mask
+# interval: counting interval
+# number:   number of accumulated intervals before sending
+# dest:     receiving HTML destination
+# log:      log file
+trap "kill 0" EXIT
+for i in /etc/s0Logger.d/*.conf; do
+    (
+        . $i
+        echo "starting counter $mask $interval 2>>$log | buffer 2>>$log | sender $number $dest 2>>$log" >>$log
+        while true; do
+            . $i
+            counter $mask $interval 2>>$log | buffer 2>>$log | sender $number $dest 2>>$log
+            echo "restarting counter $mask $interval 2>>$log | buffer 2>>$log | sender $number $dest 2>>$log" >>$log
+        done
+    )&
+done
+while true; do sleep 100000; done
