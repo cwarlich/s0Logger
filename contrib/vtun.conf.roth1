@@ -1,0 +1,25 @@
+options {
+    port 5000;
+    ifconfig /sbin/ifconfig;
+}
+
+default {
+    compress no;
+    speed 0;
+    multi yes;
+}
+
+fritz {
+    passwd inteb11;
+    type ether;
+    timeout 60;
+    keepalive yes;
+    proto tcp;
+    persist yes;
+    up {
+        ifconfig "%% 10.0.0.2 netmask 255.255.255.0 up";
+    };
+    down {
+        ifconfig "%% down";
+    };
+}
