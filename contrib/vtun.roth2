@@ -13,7 +13,7 @@
 # Client sessions to start. Up to ten instances can be configured.
 #
 # Session name
-CLIENT0_NAME=fratz
+CLIENT0_NAME=roth2
 #
 # Destination host
 CLIENT0_HOST=warlich.selfip.com

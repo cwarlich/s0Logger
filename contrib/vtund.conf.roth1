@@ -9,7 +9,7 @@ default {
     multi yes;
 }
 
-fritz {
+roth1 {
     passwd inteb11;
     type ether;
     timeout 60;

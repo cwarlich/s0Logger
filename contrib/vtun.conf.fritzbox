@@ -13,7 +13,7 @@ default {
 
 
 
-fritz {
+roth1 {
     passwd inteb11;
     type ether;
     timeout 60;
@@ -28,7 +28,7 @@ fritz {
     };
 }
 
-fratz {
+roth2 {
     passwd inteb11;
     type ether;
     timeout 60;

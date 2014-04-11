@@ -12,6 +12,9 @@ $(foreach i,\
           $(eval /etc/s0Logger.d/$i.conf: $(SourceDirectory)/devices/$i/s0Logger.conf | /etc/s0Logger.d /var/log/s0Logger;\
           	cp $$< $$@)\
 )
+vtun: /etc/vtund.conf /etc/default/vtun
+/etc/vtund.conf: $(SourceDirectory)/contrib/vtund.conf.$(shell hostname); cp $< $@
+/etc/default/vtun: $(SourceDirectory)/contrib/vtun.$(shell hostname); cp $< $@
 
 dest=/usr/local/bin
 install: $(addprefix $(dest)/,counter buffer sender s0Logger) /etc/init.d/s0Logger.sh /etc/logrotate.d/s0Logger $(conf)
