@@ -4,17 +4,11 @@ options {
 }
 
 default {
-    compress no;
-    speed 0;
-    multi yes;
+    timeout 10;
 }
 
 roth1 {
     passwd inteb11;
-    type ether;
-    timeout 60;
-    keepalive no;
-    proto udp;
     persist yes;
     up {
         ifconfig "%% 10.0.0.2 netmask 255.255.255.0 up";
