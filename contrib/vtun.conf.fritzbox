@@ -17,8 +17,8 @@ roth1 {
     passwd inteb11;
     type ether;
     timeout 60;
-    keepalive yes;
-    proto tcp;
+    keepalive no;
+    proto udp;
     persist yes;
     up {
         ifconfig "%% 10.0.0.1 netmask 255.255.255.0 up";
@@ -32,8 +32,8 @@ roth2 {
     passwd inteb11;
     type ether;
     timeout 60;
-    keepalive yes;
-    proto tcp;
+    keepalive no;
+    proto udp;
     persist yes;
     up {
         ifconfig "%% 10.0.1.1 netmask 255.255.255.0 up";
