@@ -17,7 +17,7 @@ vtun: /etc/vtund.conf /etc/default/vtun
 /etc/default/vtun: $(SourceDirectory)/contrib/vtun.$(shell hostname); cp $< $@
 
 dest=/usr/local/bin
-install: $(addprefix $(dest)/,counter buffer sender s0Logger) /etc/init.d/s0Logger.sh /etc/logrotate.d/s0Logger $(conf)
+install: $(addprefix $(dest)/,counter buffer sender s0Logger) /etc/init.d/s0Logger.sh /etc/logrotate.d/s0Logger $(conf) vtun
 	update-rc.d s0Logger.sh defaults 90 10
 	#apt-get install -y curl
 $(dest)/counter: $(DerivedDirectory)/counter | /usr/local/bin ; cp $< $@
