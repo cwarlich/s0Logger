@@ -16,7 +16,7 @@
 CLIENT0_NAME=roth1
 #
 # Destination host
-CLIENT0_HOST=warlich.selfip.com
+CLIENT0_HOST=warlich.my-wan.de
 #
 # Optional parameters
 # CLIENT0_ARGS=
