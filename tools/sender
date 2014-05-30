@@ -99,7 +99,7 @@ while read line; do
         if ! read -t 0 -N 0; then
             echo rebooting when unconnected at `date`, was exiting. >&2
             echo -n -e "$buffer"
-            ./reboot.tcl >&2
+            reboot.tcl >&2
             echo "reboot triggered, continuing" >&2
             connected=1
         fi
