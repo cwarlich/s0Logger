@@ -9,7 +9,7 @@ if [ $debug -eq 1 ]; then
     reconnectTime=1
     connectTimeout=3
     transferTimeout=2
-    retries=3
+    retries=90
     nightStart=15
     nightEnd=22
 else
@@ -99,7 +99,7 @@ while read line; do
         if ! read -t 0 -N 0; then
             echo rebooting when unconnected at `date`, was exiting. >&2
             echo -n -e "$buffer"
-            ./reboot.tcl >&2
+            reboot.exp >&2
             echo "reboot triggered, continuing" >&2
             connected=1
         fi
