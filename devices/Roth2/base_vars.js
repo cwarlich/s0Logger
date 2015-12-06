@@ -1,7 +1,7 @@
 var Boot=99
-var AnlagenKWP=40000
-var time_start = new Array(7,6,6,6,5,5,5,5,6,6,7,7)
-var time_end = new Array(16,17,19,21,22,22,21,20,19,17,16)
+var AnlagenKWP=60000
+var time_start = new Array(7,6,5,5,4,4,4,5,5,6,7,7)
+var time_end = new Array(16,17,19,21,22,22,21,20,19,17,16,16)
 var sollMonth = new Array(2,6,9,11,11,13,13,12,10,6,4,3)
 var SollYearKWP=850
 var AnzahlWR = 6
